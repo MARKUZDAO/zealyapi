@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/verify.py": {
+    "index.py": {
       "runtime": "python3.9",
       "includeFiles": "requirements.txt"
     }
