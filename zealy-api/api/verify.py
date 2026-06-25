@@ -1,4 +1,3 @@
-import os
 from flask import Flask, request, jsonify
 from web3 import Web3
 
@@ -12,7 +11,6 @@ FACTORY = Web3.to_checksum_address("0x7D0FFa854edaE7659A1989Be42Df4CCe218F4c8C")
 MORPHO  = Web3.to_checksum_address("0x80cb97194e9C885e313B76Bc108C5F7307f534F2")
 MARKET_ID = "0x2dffbf1298d075cead09e1f8cc312c43582dd4b44e00fa216d16014f2023036c"
 
-# Минимальные ABI
 FACTORY_ABI = [
     {"inputs":[],"name":"allPairsLength","outputs":[{"type":"uint256"}],"stateMutability":"view","type":"function"},
     {"inputs":[{"type":"uint256"}],"name":"allPairs","outputs":[{"type":"address"}],"stateMutability":"view","type":"function"}
