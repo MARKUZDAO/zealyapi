@@ -1,4 +1,4 @@
-import os, json
+import os
 from flask import Flask, request, jsonify
 from web3 import Web3
 
@@ -36,27 +36,25 @@ def check_swaps(wallet, min_swaps):
     if not pairs:
         return False
     topic_swap = w3.keccak(text="Swap(address,address,uint256,uint256)").hex()
-    user = wallet[2:].lower()  # убираем '0x'
+    user = wallet[2:].lower()
     count = 0
     try:
-        # 'to' = пользователь (второй indexed параметр)
         logs = w3.eth.get_logs({
             "address": pairs,
             "topics": [topic_swap, None, "0x" + user.zfill(64)],
             "fromBlock": 0, "toBlock": "latest"
         })
         count += len(logs)
-    except Exception:
+    except:
         pass
     try:
-        # 'sender' = пользователь (первый indexed параметр)
         logs = w3.eth.get_logs({
             "address": pairs,
             "topics": [topic_swap, "0x" + user.zfill(64)],
             "fromBlock": 0, "toBlock": "latest"
         })
         count += len(logs)
-    except Exception:
+    except:
         pass
     return count >= min_swaps
 
@@ -74,10 +72,12 @@ def check_liquidity(wallet, pair_addr):
 @app.route("/api/verify", methods=["POST"])
 def verify():
     data = request.get_json()
-    if not data: return jsonify({"error": "invalid JSON"}), 400
+    if not data:
+        return jsonify({"error": "invalid JSON"}), 400
     wallet = data.get("wallet") or data.get("account")
-    task   = data.get("task") or data.get("metadata", {}).get("task")
-    if not wallet or not task: return jsonify({"error": "wallet and task required"}), 400
+    task = data.get("task") or data.get("metadata", {}).get("task")
+    if not wallet or not task:
+        return jsonify({"error": "wallet and task required"}), 400
 
     try:
         if task == "swaps":
@@ -87,7 +87,8 @@ def verify():
             ok = check_borrow(wallet)
         elif task == "liquidity":
             pair = data.get("pair")
-            if not pair: return jsonify({"error": "pair address required"}), 400
+            if not pair:
+                return jsonify({"error": "pair address required"}), 400
             ok = check_liquidity(wallet, pair)
         else:
             return jsonify({"error": f"unknown task '{task}'"}), 400
