@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/verify.py": {
-      "runtime": "python3.9"
-    }
-  }
-}
